@@ -63,6 +63,7 @@ public class SolutionDisplayer extends GridPane {
                 int c = Integer.parseInt((s[3].split("\'"))[0]);
                 Cell cell = new Cell(cellWidth, cellHeight, imageFilePath.toString());
                 add(cell, c, r);
+
                 cell.draw();
             }
 

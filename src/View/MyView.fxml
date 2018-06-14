@@ -95,21 +95,35 @@
 
         <GridPane BorderPane.alignment="CENTER">
             <children>
+                <SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg"/>
                 <MazeDisplayer fx:id="mazeDisplayer" imageFilePath="resources/Images/wall1.jpg" />
-                <!--<SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg"/>-->
-                <!--<CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>-->
-                    <GridPane  BorderPane.alignment="CENTER">
-                        <children>
-                            <SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg" />
-                                <GridPane  BorderPane.alignment="CENTER">
-                                    <children>
-                                        <CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg" />
-                                    </children>
-                                </GridPane>
-                        </children>
-                    </GridPane>
+                <CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>
+
             </children>
         </GridPane>
+
+        <!--<GridPane BorderPane.alignment="CENTER">-->
+            <!--<children>-->
+                <!--<SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg"/>-->
+            <!--</children>-->
+        <!--</GridPane>-->
+        <!--<GridPane BorderPane.alignment="CENTER">-->
+            <!--<children>-->
+                <!--<CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>-->
+            <!--</children>-->
+        <!--</GridPane>-->
+
+
+                    <!--<GridPane  BorderPane.alignment="CENTER">-->
+                        <!--<children>-->
+                            <!--<SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg" />-->
+                                <!--<GridPane  BorderPane.alignment="CENTER">-->
+                                    <!--<children>-->
+                                        <!--<CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg" />-->
+                                    <!--</children>-->
+                                <!--</GridPane>-->
+                        <!--</children>-->
+                    <!--</GridPane>-->
 
         <!--<Pane> prefWidth="256.0" BorderPane.alignment="CENTER">-->
         <!--<children>-->
