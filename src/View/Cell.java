@@ -24,11 +24,12 @@ public class Cell extends Canvas {
     }
 
     public void draw() {
-        if (new File(imageFilePath).exists()) {
+        String path=imageFilePath.substring(23,imageFilePath.length()-1);
+        if (new File(path).exists()) {
             try {
                 GraphicsContext gc = getGraphicsContext2D();
                 gc.clearRect(0, 0, getWidth(), getHeight());
-                Image image = new Image(new FileInputStream(imageFilePath));
+                Image image = new Image(new FileInputStream(path));
                 gc.drawImage(image, 0, 0, width, height);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

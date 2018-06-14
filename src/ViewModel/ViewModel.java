@@ -1,6 +1,8 @@
 package ViewModel;
 
 import Model.IModel;
+import algorithms.mazeGenerators.Maze;
+import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.input.KeyCode;
@@ -15,8 +17,8 @@ public class ViewModel extends Observable implements Observer {
     private int characterPositionRowIndex;
     private int characterPositionColumnIndex;
 
-    public StringProperty characterPositionRow = new SimpleStringProperty("1"); //For Binding
-    public StringProperty characterPositionColumn = new SimpleStringProperty("1"); //For Binding
+    public StringProperty characterPositionRow = new SimpleStringProperty("0"); //For Binding
+    public StringProperty characterPositionColumn = new SimpleStringProperty("0"); //For Binding
 
     public ViewModel(IModel model){
         this.model = model;
@@ -34,15 +36,23 @@ public class ViewModel extends Observable implements Observer {
         }
     }
 
-    public void generateMaze(int width, int height){
-        model.generateMaze(width, height);
+    public void generateMaze(int height, int width){
+        model.generateMaze(height,width);
+        characterPositionRowIndex=model.getMaze().getStartPosition().getRowIndex();
+        characterPositionRow.setValue(characterPositionRowIndex+"");
+        characterPositionColumnIndex=model.getMaze().getStartPosition().getColumnIndex();
+        characterPositionColumn.setValue(+characterPositionColumnIndex+"");
+    }
+
+    public void solveMaze(){
+        model.solveMaze(getMaze());
     }
 
     public void moveCharacter(KeyCode movement){
         model.moveCharacter(movement);
     }
 
-    public int[][] getMaze() {
+    public Maze getMaze() {
         return model.getMaze();
     }
 
@@ -52,5 +62,9 @@ public class ViewModel extends Observable implements Observer {
 
     public int getCharacterPositionColumn() {
         return characterPositionColumnIndex;
+    }
+
+    public Solution getSolution() {
+        return model.getMazeSolution();
     }
 }

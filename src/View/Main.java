@@ -16,7 +16,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Model model = new Model();
+        model.startServers();
         ViewModel viewModel = new ViewModel(model);
+        model.addObserver(viewModel);
         //---------
         primaryStage.setTitle("The Amazing Maze");
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -25,7 +27,9 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         //---------
         MyViewController view = fxmlLoader.getController() ;
+        //view.setResizeEvent(scene);
         view.setViewModel(viewModel);
+        viewModel.addObserver(view);
         //---------
         primaryStage.show();
     }

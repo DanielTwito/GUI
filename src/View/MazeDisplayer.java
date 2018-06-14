@@ -1,5 +1,7 @@
 package View;
 
+import algorithms.mazeGenerators.Maze;
+import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.GridPane;
@@ -7,7 +9,7 @@ import javafx.scene.layout.GridPane;
 public class MazeDisplayer extends GridPane {
     private double width;
     private double height;
-    private int[][] maze;
+    private Maze maze;
 
     private StringProperty imageFilePath = new SimpleStringProperty();
 
@@ -19,11 +21,13 @@ public class MazeDisplayer extends GridPane {
         this.imageFilePath.set(imageFilePath);
     }
 
-    public void setMaze(int[][] maze, double width, double height) {
+    public void setMaze(Maze maze, double width, double height) {
         this.maze = maze;
         this.width = width;
         this.height = height;
-        initialize(maze.length, maze[0].length);
+        initialize(maze.getRow(), maze.getCol());
+        getChildren().clear();
+        draw();
     }
 
     private void initialize(int rows, int columns) {
@@ -38,15 +42,15 @@ public class MazeDisplayer extends GridPane {
 
     public void draw() {
         if (maze != null) {
-            double cellHeight = height / maze.length;
-            double cellWidth = width / maze[0].length;
+            double cellHeight = height / maze.getRow();
+            double cellWidth = width / maze.getCol();
             try {
                 //Draw Maze
-                for (int row = 0; row < maze.length; row++) {
-                    for (int column = 0; column < maze[row].length; column++) {
-                        if (maze[row][column] == 1) {
+                for (int row = 0; row < maze.getRow(); row++) {
+                    for (int column = 0; column < maze.getCol(); column++) {
+                        if (maze.getValueAt(new Position(row,column)) == 1) {
                             Cell cell = new Cell(cellWidth, cellHeight, imageFilePath.toString());
-                            add(cell, row, column);
+                            add(cell,column , row);
                             cell.draw();
                         }
                     }

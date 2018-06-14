@@ -48,11 +48,11 @@ public class Model extends Observable implements IModel{
 
     private Maze maze;
     private Solution mazeSolution;
-    private int characterPositionRow = 1;
-    private int characterPositionColumn = 1;
+    private int characterPositionRow = 5;
+    private int characterPositionColumn = 5;
 
     @Override
-    public void generateMaze(int width, int height) {
+    public void generateMaze(int height, int width) {
         //Generate maze
         try {
             Client client = new Client(InetAddress.getLocalHost(), 5400, new IClientStrategy() {
@@ -70,6 +70,8 @@ public class Model extends Observable implements IModel{
                         byte[] decompressedMaze = new byte[100000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
                         is.read(decompressedMaze); //Fill decompressedMaze with bytes
                         maze = new Maze(decompressedMaze);
+                        characterPositionRow=maze.getStartPosition().getRowIndex();
+                        characterPositionColumn=maze.getStartPosition().getColumnIndex();
                         //maze.print();
                     } catch (Exception e) {
                         e.printStackTrace();

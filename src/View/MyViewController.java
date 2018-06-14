@@ -1,6 +1,8 @@
 package View;
 
 import ViewModel.ViewModel;
+import algorithms.mazeGenerators.Maze;
+import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -22,8 +24,8 @@ public class MyViewController implements Observer,IView {
     @FXML
     private ViewModel viewModel;
     public MazeDisplayer mazeDisplayer;
-   // public SolutionDisplayer solutionDisplayer ;
-    //public CharacterDisplayer characterDisplayer ;
+    public SolutionDisplayer solutionDisplayer ;
+    public CharacterDisplayer characterDisplayer ;
     public javafx.scene.control.TextField txtfld_rowsNum;
     public javafx.scene.control.TextField txtfld_columnsNum;
     public javafx.scene.control.Label lbl_rowsNum;
@@ -43,30 +45,48 @@ public class MyViewController implements Observer,IView {
     @Override
     public void update(Observable o, Object arg) {
         if (o == viewModel) {
-            displayMaze(viewModel.getMaze());
-            btn_generateMaze.setDisable(false);
+//            characterDisplayer.setCharacterDisplayer(500,500,
+//                    viewModel.getMaze().getCol(),viewModel.getMaze().getRow(),
+//                    viewModel.getCharacterPositionRow(),viewModel.getCharacterPositionColumn());
+
+
         }
     }
 
     @Override
-    public void displayMaze(int[][] maze) {
-        mazeDisplayer.setMaze(maze,300,300);
+    public void displayMaze(Maze maze) {
+        solutionDisplayer.getChildren().clear();
+        characterDisplayer.getChildren().clear();
+        mazeDisplayer.setMaze(maze,500,500);
         int characterPositionRow = viewModel.getCharacterPositionRow();
         int characterPositionColumn = viewModel.getCharacterPositionColumn();
         //mazeDisplayer.setCharacterPosition(characterPositionRow, characterPositionColumn);
         this.characterPositionRow.set(characterPositionRow + "");
         this.characterPositionColumn.set(characterPositionColumn + "");
+//        characterDisplayer.setCharacterDisplayer(500,500,
+//                viewModel.getMaze().getCol(),viewModel.getMaze().getRow(),
+//                characterPositionRow,characterPositionColumn);
     }
 
     public void generateMaze() {
         int heigth = Integer.valueOf(txtfld_rowsNum.getText());
         int width = Integer.valueOf(txtfld_columnsNum.getText());
         btn_generateMaze.setDisable(true);
-        viewModel.generateMaze(width, heigth);
+        viewModel.generateMaze(heigth, width);
+        Maze m=viewModel.getMaze();
+        displayMaze(m);
+        btn_generateMaze.setDisable(false);
+
+
     }
 
     public void solveMaze(ActionEvent actionEvent) {
-        showAlert("Solving maze..");
+        viewModel.solveMaze();
+        Solution sol=viewModel.getSolution();
+        solutionDisplayer.setSolutionDisplayer(sol,500,500,
+                viewModel.getMaze().getCol(),viewModel.getMaze().getRow());
+
+        //showAlert("Solving maze..");
     }
 
     private void showAlert(String alertMessage) {

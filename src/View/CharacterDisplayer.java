@@ -1,5 +1,6 @@
 package View;
 
+import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.GridPane;
@@ -8,8 +9,10 @@ public class CharacterDisplayer extends GridPane {
 
     private double width;
     private double height;
-    private int columns;
-    private int rows;
+    private int column;
+    private int row;
+    private int charCol;
+    private int charRow;
     private double cellWidth;
     private double cellHeight;
 
@@ -23,14 +26,19 @@ public class CharacterDisplayer extends GridPane {
         this.imageFilePath.set(imageFilePath);
     }
 
-    public CharacterDisplayer(double width, double height, int columns, int rows) {
+    public void setCharacterDisplayer(double width, double height, int columns, int rows,int charRow,int charCol) {
         this.width = width;
         this.height = height;
-        this.columns = columns;
-        this.rows = rows;
+        this.charCol = charCol;
+        this.charRow = charRow;
+        this.column=columns;
+        this.row=rows;
         cellWidth = width / (double) columns;
         cellHeight = height / (double) rows;
         initialize(rows, columns);
+        getChildren().clear();
+        draw(charRow,charCol);
+
     }
 
     private void initialize(int rows, int columns) {
@@ -44,9 +52,16 @@ public class CharacterDisplayer extends GridPane {
     }
 
     public void draw(int rowIndex, int columnIndex) {
-        getChildren().clear();
-        Cell cell = new Cell(cellWidth, cellHeight, imageFilePath.toString());
-        add(cell, columnIndex, rowIndex);
-        cell.draw();
+
+
+//        for (int r = 0; r < row; r++) {
+//            for (int c = 0; c < column; c++) {
+//                if (r==rowIndex && c==columnIndex) {
+                    Cell cell = new Cell(cellWidth, cellHeight, imageFilePath.toString());
+                    add(cell, columnIndex,rowIndex );
+                    cell.draw();
+//                }
+//            }
+//        }
     }
 }
