@@ -36,11 +36,10 @@ public class MazeDisplayer extends GridPane {
         }
     }
 
-    public void redraw() {
+    public void draw() {
         if (maze != null) {
             double cellHeight = height / maze.length;
             double cellWidth = width / maze[0].length;
-
             try {
                 //Draw Maze
                 for (int row = 0; row < maze.length; row++) {

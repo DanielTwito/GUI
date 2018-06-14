@@ -7,7 +7,8 @@ import javafx.scene.canvas.Canvas;
 public class MyViewController implements IView {
 
     @FXML
-    private Canvas canvas;
+    MazeDisplayer mazeDisplayer;
+
     private ViewModel viewModel;
 
 

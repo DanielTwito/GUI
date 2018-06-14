@@ -29,7 +29,7 @@ public class CharacterDisplayer extends GridPane {
         this.columns = columns;
         this.rows = rows;
         cellWidth = width / (double) columns;
-        cellHeight = width / (double) rows;
+        cellHeight = height / (double) rows;
         initialize(rows, columns);
     }
 

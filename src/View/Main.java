@@ -18,7 +18,7 @@ public class Main extends Application {
         Model model = new Model();
         ViewModel viewModel = new ViewModel(model);
         //---------
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("The Amazing Maze");
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("MyView.fxml").openStream());
         Scene scene = new Scene(root,600,600);
