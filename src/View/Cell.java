@@ -33,6 +33,8 @@ public class Cell extends Canvas {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
+            //check
         }
     }
 }
