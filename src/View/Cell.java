@@ -34,7 +34,6 @@ public class Cell extends Canvas {
                 e.printStackTrace();
             }
 
-            //check
         }
     }
 }

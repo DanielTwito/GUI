@@ -21,8 +21,8 @@
         <Pane BorderPane.alignment="CENTER">
             <children>
                 <MazeDisplayer fx:id="mazeDisplayer" imageFilePath="resources/Images/character1.jpg" />
-                <SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/character1.jpg"/>
-                <CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>
+                <!--<SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/character1.jpg"/>-->
+                <!--<CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>-->
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

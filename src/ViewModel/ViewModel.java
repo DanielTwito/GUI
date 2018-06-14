@@ -1,12 +1,56 @@
 package ViewModel;
 
-import Model.Model;
+import Model.IModel;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.input.KeyCode;
 
-public class ViewModel {
+import java.util.Observable;
+import java.util.Observer;
 
-    private Model model;
+public class ViewModel extends Observable implements Observer {
 
-    public ViewModel(Model model) {
+    private IModel model;
+
+    private int characterPositionRowIndex;
+    private int characterPositionColumnIndex;
+
+    public StringProperty characterPositionRow = new SimpleStringProperty("1"); //For Binding
+    public StringProperty characterPositionColumn = new SimpleStringProperty("1"); //For Binding
+
+    public ViewModel(IModel model){
         this.model = model;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o==model){
+            characterPositionRowIndex = model.getCharacterPositionRow();
+            characterPositionRow.set(characterPositionRowIndex + "");
+            characterPositionColumnIndex = model.getCharacterPositionColumn();
+            characterPositionColumn.set(characterPositionColumnIndex + "");
+            setChanged();
+            notifyObservers();
+        }
+    }
+
+    public void generateMaze(int width, int height){
+        model.generateMaze(width, height);
+    }
+
+    public void moveCharacter(KeyCode movement){
+        model.moveCharacter(movement);
+    }
+
+    public int[][] getMaze() {
+        return model.getMaze();
+    }
+
+    public int getCharacterPositionRow() {
+        return characterPositionRowIndex;
+    }
+
+    public int getCharacterPositionColumn() {
+        return characterPositionColumnIndex;
     }
 }

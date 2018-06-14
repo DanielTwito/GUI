@@ -1,5 +1,6 @@
 package View;
 
+import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.GridPane;
@@ -9,6 +10,7 @@ public class SolutionDisplayer extends GridPane {
     private double height;
     private int columns;
     private int rows;
+    private Solution solution;
     //solution object*/
 
     private StringProperty imageFilePath = new SimpleStringProperty();
@@ -22,7 +24,7 @@ public class SolutionDisplayer extends GridPane {
     }
 
 
-    public SolutionDisplayer(/*solution object*/double width, double height, int columns, int rows) {
+    public SolutionDisplayer(Solution sol,double width, double height, int columns, int rows) {
         this.width = width;
         this.height = height;
         this.columns = columns;
