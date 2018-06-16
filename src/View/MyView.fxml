@@ -46,17 +46,6 @@
                     <Label text="Char column:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                     <Label fx:id="lbl_rowsNum" text="${controller.characterPositionRow}" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                     <Label fx:id="lbl_columnsNum" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                    <!--<Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="${controller.characterPositionRow}" />-->
-                    <!--<Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="${controller.characterPositionColumn}"/>-->
-                    <!--                    <ChoiceBox value="2 minutes" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                                            <items>
-                                                <FXCollections fx:factory="observableArrayList">
-                                                    <String fx:value="2 minutes" />
-                                                    <String fx:value="5 minutes" />
-                                                    <String fx:value="15 minutes" />
-                                                </FXCollections>
-                                            </items>
-                                        </ChoiceBox>-->
                 </GridPane>
             </children>
             <padding>
@@ -79,8 +68,8 @@
                         <Menu mnemonicParsing="false" text="File">
                             <items>
                                 <MenuItem fx:id="menu_new" mnemonicParsing="false" onAction="#generateMaze" text="New" />
-                                <!--<MenuItem fx:id="menu_open" mnemonicParsing="false" onAction="#loadMaze" text="Open" />-->
-                                <!--<MenuItem fx:id="menu_save" mnemonicParsing="false" onAction="#saveMaze" text="Save" />-->
+                                <MenuItem fx:id="menu_open" mnemonicParsing="false" onAction="#loadMaze" text="Open" />
+                                <MenuItem fx:id="menu_save" mnemonicParsing="false" onAction="#saveMaze" text="Save" />
                                 <MenuItem fx:id="menu_close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
                             </items>
                         </Menu>

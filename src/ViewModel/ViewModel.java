@@ -5,6 +5,7 @@ import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.scene.input.KeyCode;
 
 import java.io.File;
@@ -40,7 +41,6 @@ public class ViewModel extends Observable implements Observer {
             characterPositionColumnIndex = model.getCharacterPositionColumn();
             characterPositionColumn.set(characterPositionColumnIndex + "");
             isReached=model.isReached();
-           // loc = model.getSolutionPath();
             setChanged();
             notifyObservers(arg);
         }
@@ -80,5 +80,14 @@ public class ViewModel extends Observable implements Observer {
     public boolean isReached() {
         return isReached;
     }
+
+    public void loadMaze(File file) {
+        model.loadMaze(file);
+    }
+
+    public void saveMaze(File file){
+        model.saveMaze(file);
+    }
+
 
 }

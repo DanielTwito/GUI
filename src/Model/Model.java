@@ -219,4 +219,34 @@ public class Model extends Observable implements IModel{
         }
         return sol;
     }
+    @Override
+    public void loadMaze(File file){
+        try {
+            FileInputStream fis= new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            byte[] savedMaze = (byte[]) ois.readObject();
+            ois.close();
+            maze = new Maze(savedMaze);
+        } catch (Exception e) {
+            maze = null;
+        }
+        characterPositionRow=maze.getStartPosition().getRowIndex();
+        characterPositionColumn=maze.getStartPosition().getColumnIndex();
+        setChanged();
+        notifyObservers("loaded");
+    }
+
+    public void saveMaze(File file){
+        try {
+            FileOutputStream fout = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            oos.writeObject(maze.toByteArray());
+            oos.flush();
+            oos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

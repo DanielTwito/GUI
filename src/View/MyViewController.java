@@ -83,9 +83,20 @@ public class MyViewController implements Observer, IView {
             if(arg.toString()=="loaded") {
                 Maze maze = viewModel.getMaze();
                 if(maze!=null) {
-                    mazeDisplayer.setDimensions(maze.getRow(), maze.getCol());
+                    solutionDisplayer.clearCanvas();
+                    characterDisplayer.clearCanvas();
+                    mazeDisplayer.clearCanvas();
+                    int h= maze.getRow() , w = maze.getCol();
+                    mazeDisplayer.setDimensions(h,w);
+                    characterDisplayer.setDimensions(h,w);
+                    solutionDisplayer.setDimensions(h,w);
                     displayMaze(maze);
                     displayCharactetr();
+                    characterDisplayer.drawAt(maze.getGoalPosition().getRowIndex(),
+                                              maze.getGoalPosition().getColumnIndex(), characterDisplayer.getImageFileNameGoal());
+
+
+
                 }
                 else
                     showAlert("File is Corrupted");
@@ -205,25 +216,26 @@ public class MyViewController implements Observer, IView {
             solutionDisplayer.redraw();
         });
     }
-//    public void saveMaze(ActionEvent actionEvent){
-//        Stage stage = new Stage();
-//        FileChooser fileChooser=new FileChooser();
-//        FileChooser.ExtensionFilter extFilter= new FileChooser.ExtensionFilter("Data files (*.data)","*.data");
-//        fileChooser.getExtensionFilters().add(extFilter);
-//        File file = fileChooser.showSaveDialog(stage);
-//        if(file!=null)
-//            viewModel.saveMaze(file);
-//    }
+    public void saveMaze(ActionEvent actionEvent){
+        Stage stage = new Stage();
+        FileChooser fileChooser=new FileChooser();
+        FileChooser.ExtensionFilter extFilter= new FileChooser.ExtensionFilter("Data files (*.maze)","*.maze");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(stage);
+        if(file!=null)
+            viewModel.saveMaze(file);
+    }
 
-//    public void loadMaze(ActionEvent actionEvent){
-//        Stage stage = new Stage();
-//        FileChooser fileChooser=new FileChooser();
-//        FileChooser.ExtensionFilter extFilter= new FileChooser.ExtensionFilter("Data files (*.data)","*.data");
-//        fileChooser.getExtensionFilters().add(extFilter);
-//        File file = fileChooser.showOpenDialog(stage);
-//        if(file!=null)
-//            viewModel.loadMaze(file);
-//    }
+    public void loadMaze(ActionEvent actionEvent){
+        Stage stage = new Stage();
+        FileChooser fileChooser=new FileChooser();
+        FileChooser.ExtensionFilter extFilter= new FileChooser.ExtensionFilter("Data files (*.maze)","*.maze");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(stage);
+        if(file!=null)
+            viewModel.loadMaze(file);
+
+    }
 
     public void closeAction (ActionEvent actionEvent){
         Stage stage = (Stage)rootPane.getScene().getWindow();
@@ -232,7 +244,7 @@ public class MyViewController implements Observer, IView {
     public void About(ActionEvent actionEvent) {
         try {
             Stage stage = new Stage();
-            stage.setTitle("AboutController");
+            stage.setTitle("About Us!");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("About.fxml").openStream());
             Scene scene = new Scene(root, 400, 350);
