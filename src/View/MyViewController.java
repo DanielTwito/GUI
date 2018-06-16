@@ -1,92 +1,153 @@
-package View;
 
+package View;
 import ViewModel.ViewModel;
 import algorithms.mazeGenerators.Maze;
-import algorithms.search.Solution;
+import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MyViewController implements Observer,IView {
+public class MyViewController implements Observer, IView {
+
     @FXML
     private ViewModel viewModel;
+    private boolean isReached;
     public MazeDisplayer mazeDisplayer;
-    public SolutionDisplayer solutionDisplayer ;
-    public CharacterDisplayer characterDisplayer ;
+    public CharacterDisplayer characterDisplayer;
+    public SolutionDisplayer solutionDisplayer;
+    public javafx.scene.layout.BorderPane rootPane;
     public javafx.scene.control.TextField txtfld_rowsNum;
     public javafx.scene.control.TextField txtfld_columnsNum;
     public javafx.scene.control.Label lbl_rowsNum;
     public javafx.scene.control.Label lbl_columnsNum;
     public javafx.scene.control.Button btn_generateMaze;
+    public javafx.scene.control.Button btn_solveMaze;
+   // public javafx.scene.control.MenuItem menu_save;
+
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
+        btn_solveMaze.setDisable(true);
+      //  menu_save.setDisable(true);
         bindProperties(viewModel);
     }
 
     private void bindProperties(ViewModel viewModel) {
         lbl_rowsNum.textProperty().bind(viewModel.characterPositionRow);
         lbl_columnsNum.textProperty().bind(viewModel.characterPositionColumn);
+        txtfld_rowsNum.textProperty().addListener((observable, oldValue, newValue) ->{
+            if(!newValue.matches("\\d*"))
+                txtfld_rowsNum.setText(newValue.replaceAll("[^\\d]",""));});
+        txtfld_columnsNum.textProperty().addListener((observable, oldValue, newValue) ->{
+            if(!newValue.matches("\\d*"))
+                txtfld_columnsNum.setText(newValue.replaceAll("[^\\d]",""));});
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if (o == viewModel) {
-//            characterDisplayer.setCharacterDisplayer(500,500,
-//                    viewModel.getMaze().getCol(),viewModel.getMaze().getRow(),
-//                    viewModel.getCharacterPositionRow(),viewModel.getCharacterPositionColumn());
 
+            if(arg.toString()=="maze") {
+                displayMaze(viewModel.getMaze());
+                displayCharactetr();
+                Position end = viewModel.getMaze().getGoalPosition();
+               characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
 
+            }
+
+            if(arg.toString()=="character") {
+                displayCharactetr();
+                if (!isReached) {
+                    Position end = viewModel.getMaze().getGoalPosition();
+                    characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
+                }
+            }
+
+            if(arg.toString()=="solve")
+                displaySolution();
+
+            if(arg.toString()=="loaded") {
+                Maze maze = viewModel.getMaze();
+                if(maze!=null) {
+                    mazeDisplayer.setDimensions(maze.getRow(), maze.getCol());
+                    displayMaze(maze);
+                    displayCharactetr();
+                }
+                else
+                    showAlert("File is Corrupted");
+            }
+            btn_generateMaze.setDisable(false);
         }
+    }
+
+    private void displaySolution() {
+        btn_solveMaze.setDisable(false);
+        solutionDisplayer.setList(viewModel.getSolution());
+    }
+
+    private void displayCharactetr(){
+        int characterPositionRow = viewModel.getCharacterPositionRow();
+        int characterPositionColumn = viewModel.getCharacterPositionColumn();
+        characterDisplayer.setCharacterPosition(characterPositionRow, characterPositionColumn);
+        this.characterPositionRow.set(characterPositionRow + "");
+        this.characterPositionColumn.set(characterPositionColumn + "");
+        if(viewModel.isReached())
+            reachGoal();
     }
 
     @Override
     public void displayMaze(Maze maze) {
-        solutionDisplayer.getChildren().clear();
-        characterDisplayer.getChildren().clear();
-        mazeDisplayer.setMaze(maze,500,500);
-        int characterPositionRow = viewModel.getCharacterPositionRow();
-        int characterPositionColumn = viewModel.getCharacterPositionColumn();
-        //mazeDisplayer.setCharacterPosition(characterPositionRow, characterPositionColumn);
-        this.characterPositionRow.set(characterPositionRow + "");
-        this.characterPositionColumn.set(characterPositionColumn + "");
-//        characterDisplayer.setCharacterDisplayer(500,500,
-//                viewModel.getMaze().getCol(),viewModel.getMaze().getRow(),
-//                characterPositionRow,characterPositionColumn);
+        btn_solveMaze.setDisable(false);
+        //menu_save.setDisable(false);
+        mazeDisplayer.setMaze(maze);
     }
 
     public void generateMaze() {
-        int heigth = Integer.valueOf(txtfld_rowsNum.getText());
-        int width = Integer.valueOf(txtfld_columnsNum.getText());
-        btn_generateMaze.setDisable(true);
-        viewModel.generateMaze(heigth, width);
-        Maze m=viewModel.getMaze();
-        displayMaze(m);
-        btn_generateMaze.setDisable(false);
+        isReached=false;
+        try {
+            int heigth = Integer.valueOf(txtfld_rowsNum.getText());
+            int width = Integer.valueOf(txtfld_columnsNum.getText());
 
+            //set canvas sizes for all 3 display layres
+            mazeDisplayer.setDimensions(heigth,width);
+            characterDisplayer.setDimensions(heigth,width);
+            solutionDisplayer.setDimensions(heigth,width);
 
+            btn_solveMaze.setDisable(false);
+            btn_generateMaze.setDisable(true);
+            solutionDisplayer.clearSolution();
+
+            viewModel.generateMaze(width, heigth);
+        }catch (NumberFormatException e){showAlert("You Must Enter a Number");}
     }
 
     public void solveMaze(ActionEvent actionEvent) {
+        btn_solveMaze.setDisable(true);
         viewModel.solveMaze();
-        Solution sol=viewModel.getSolution();
-        solutionDisplayer.setSolutionDisplayer(sol,500,500,
-                viewModel.getMaze().getCol(),viewModel.getMaze().getRow());
+    }
 
-        //showAlert("Solving maze..");
+    public void reachGoal() {
+        btn_solveMaze.setDisable(true);
+        isReached=true;
+        showAlert("Amazing..");
+        //delete old game
+//        mazeDisplayer.clearCanvas();
+//        solutionDisplayer.clearCanvas();
+//        characterDisplayer.clearCanvas();
     }
 
     private void showAlert(String alertMessage) {
@@ -96,7 +157,8 @@ public class MyViewController implements Observer,IView {
     }
 
     public void KeyPressed(KeyEvent keyEvent) {
-        viewModel.moveCharacter(keyEvent.getCode());
+        if(!isReached)
+            viewModel.moveCharacter(keyEvent.getCode());
         keyEvent.consume();
     }
 
@@ -122,22 +184,51 @@ public class MyViewController implements Observer,IView {
     }
 
     public void setResizeEvent(Scene scene) {
-        long width = 0;
-        long height = 0;
-        scene.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                System.out.println("Width: " + newSceneWidth);
-            }
+        scene.widthProperty().addListener((observableValue, oldSceneWidth, newSceneWidth) -> {
+            mazeDisplayer.setCellWidth();
+            mazeDisplayer.redraw();
+
+            characterDisplayer.setCellWidth();
+            characterDisplayer.redraw();
+
+            solutionDisplayer.setCellWidth();
+            solutionDisplayer.redraw();
         });
-        scene.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                System.out.println("Height: " + newSceneHeight);
-            }
+        scene.heightProperty().addListener((observableValue, oldSceneHeight, newSceneHeight) -> {
+            mazeDisplayer.setCellHeight();
+            mazeDisplayer.redraw();
+
+            characterDisplayer.setCellHeight();
+            characterDisplayer.redraw();
+
+            solutionDisplayer.setCellHeight();
+            solutionDisplayer.redraw();
         });
     }
+//    public void saveMaze(ActionEvent actionEvent){
+//        Stage stage = new Stage();
+//        FileChooser fileChooser=new FileChooser();
+//        FileChooser.ExtensionFilter extFilter= new FileChooser.ExtensionFilter("Data files (*.data)","*.data");
+//        fileChooser.getExtensionFilters().add(extFilter);
+//        File file = fileChooser.showSaveDialog(stage);
+//        if(file!=null)
+//            viewModel.saveMaze(file);
+//    }
 
+//    public void loadMaze(ActionEvent actionEvent){
+//        Stage stage = new Stage();
+//        FileChooser fileChooser=new FileChooser();
+//        FileChooser.ExtensionFilter extFilter= new FileChooser.ExtensionFilter("Data files (*.data)","*.data");
+//        fileChooser.getExtensionFilters().add(extFilter);
+//        File file = fileChooser.showOpenDialog(stage);
+//        if(file!=null)
+//            viewModel.loadMaze(file);
+//    }
+
+    public void closeAction (ActionEvent actionEvent){
+        Stage stage = (Stage)rootPane.getScene().getWindow();
+        stage.fireEvent(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+    }
     public void About(ActionEvent actionEvent) {
         try {
             Stage stage = new Stage();
@@ -154,7 +245,5 @@ public class MyViewController implements Observer,IView {
     }
 
     //endregion
-
-
 
 }

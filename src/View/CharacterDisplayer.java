@@ -1,67 +1,68 @@
 package View;
 
+import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
-public class CharacterDisplayer extends GridPane {
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
-    private double width;
-    private double height;
-    private int column;
-    private int row;
-    private int charCol;
-    private int charRow;
-    private double cellWidth;
-    private double cellHeight;
+public class CharacterDisplayer extends Displayer {
 
-    private StringProperty imageFilePath = new SimpleStringProperty();
+    private int characterPositionRow ;
+    private int characterPositionColumn;
 
-    public String getImageFilePath() {
-        return imageFilePath.get();
+    public void setCharacterPosition(int row, int column) {
+        characterPositionRow = row;
+        characterPositionColumn = column;
+        redraw();
     }
 
-    public void setImageFilePath(String imageFilePath) {
-        this.imageFilePath.set(imageFilePath);
+    public int getCharacterPositionRow() {
+        return characterPositionRow;
+    }
+    public int getCharacterPositionColumn() {
+        return characterPositionColumn;
+    }
+    private StringProperty imageFileNameGoal = new SimpleStringProperty();
+
+
+    public String getImageFileNameGoal() {
+        return imageFileNameGoal.get();
     }
 
-    public void setCharacterDisplayer(double width, double height, int columns, int rows,int charRow,int charCol) {
-        this.width = width;
-        this.height = height;
-        this.charCol = charCol;
-        this.charRow = charRow;
-        this.column=columns;
-        this.row=rows;
-        cellWidth = width / (double) columns;
-        cellHeight = height / (double) rows;
-        initialize(rows, columns);
-        getChildren().clear();
-        draw(charRow,charCol);
-
+    public void setImageFileNameGoal(String imageFileNameGoal) {
+        this.imageFileNameGoal.set(imageFileNameGoal);
     }
 
-    private void initialize(int rows, int columns) {
-        for (int i = 0; i < rows; i++) {
-            addRow(i);
+
+    public void redraw() {
+
+        try {
+            Image characterImage = new Image(new FileInputStream(ImageFileNameCharacter.get()));
+            GraphicsContext gc = getGraphicsContext2D();
+            gc.clearRect(0, 0, getWidth(), getHeight());
+
+            //Draw Character
+            gc.drawImage(characterImage, characterPositionColumn * getCellWidth(), characterPositionRow * getCellHeight(), getCellWidth(), getCellHeight());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-
-        for (int j = 0; j < columns; j++) {
-            addColumn(j);
-        }
     }
 
-    public void draw(int rowIndex, int columnIndex) {
 
+    private StringProperty ImageFileNameCharacter = new SimpleStringProperty();
 
-//        for (int r = 0; r < row; r++) {
-//            for (int c = 0; c < column; c++) {
-//                if (r==rowIndex && c==columnIndex) {
-                    Cell cell = new Cell(cellWidth, cellHeight, imageFilePath.toString());
-                    add(cell, columnIndex,rowIndex );
-                    cell.draw();
-//                }
-//            }
-//        }
+    public String getImageFileNameCharacter() {
+        return ImageFileNameCharacter.get();
+    }
+
+    public void setImageFileNameCharacter(String imageFileNameCharacter) {
+        this.ImageFileNameCharacter.set(imageFileNameCharacter);
     }
 }

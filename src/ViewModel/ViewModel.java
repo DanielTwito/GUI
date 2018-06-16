@@ -2,24 +2,32 @@ package ViewModel;
 
 import Model.IModel;
 import algorithms.mazeGenerators.Maze;
-import algorithms.search.Solution;
+import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.input.KeyCode;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 public class ViewModel extends Observable implements Observer {
 
     private IModel model;
-
+    private ArrayList<Position> loc;
     private int characterPositionRowIndex;
     private int characterPositionColumnIndex;
+    private boolean isReached=false;
 
-    public StringProperty characterPositionRow = new SimpleStringProperty("0"); //For Binding
-    public StringProperty characterPositionColumn = new SimpleStringProperty("0"); //For Binding
+    public StringProperty characterPositionRow = new SimpleStringProperty(); //For Binding
+    public StringProperty characterPositionColumn = new SimpleStringProperty(); //For Binding
 
+    /**
+     * c'tor
+     * @param model
+     */
     public ViewModel(IModel model){
         this.model = model;
     }
@@ -31,21 +39,26 @@ public class ViewModel extends Observable implements Observer {
             characterPositionRow.set(characterPositionRowIndex + "");
             characterPositionColumnIndex = model.getCharacterPositionColumn();
             characterPositionColumn.set(characterPositionColumnIndex + "");
+            isReached=model.isReached();
+           // loc = model.getSolutionPath();
             setChanged();
-            notifyObservers();
+            notifyObservers(arg);
         }
     }
 
-    public void generateMaze(int height, int width){
-        model.generateMaze(height,width);
-        characterPositionRowIndex=model.getMaze().getStartPosition().getRowIndex();
-        characterPositionRow.setValue(characterPositionRowIndex+"");
-        characterPositionColumnIndex=model.getMaze().getStartPosition().getColumnIndex();
-        characterPositionColumn.setValue(+characterPositionColumnIndex+"");
+    public void solveMaze(){
+        model.solveMaze();
     }
 
-    public void solveMaze(){
-        model.solveMaze(getMaze());
+    public ArrayList<Position> getSolution() {
+        loc = model.getSolutionPath();
+        return loc;
+    }
+
+    public void generateMaze(int width, int height){
+        loc = null;
+        isReached=false;
+        model.generateMaze(height,width);
     }
 
     public void moveCharacter(KeyCode movement){
@@ -64,7 +77,8 @@ public class ViewModel extends Observable implements Observer {
         return characterPositionColumnIndex;
     }
 
-    public Solution getSolution() {
-        return model.getMazeSolution();
+    public boolean isReached() {
+        return isReached;
     }
+
 }

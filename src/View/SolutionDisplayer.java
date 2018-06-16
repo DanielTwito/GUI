@@ -1,75 +1,59 @@
 package View;
 
 import algorithms.mazeGenerators.Position;
-import algorithms.search.AState;
-import algorithms.search.MazeState;
-import algorithms.search.Solution;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.layout.GridPane;
+import javafx.geometry.Pos;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.util.Pair;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class SolutionDisplayer extends GridPane {
-    private double width;
-    private double height;
-    private int columns;
-    private int rows;
-    private Solution solution;
-    //solution object*/
+public class SolutionDisplayer extends Displayer {
 
-    private StringProperty imageFilePath = new SimpleStringProperty();
+        private ArrayList<Position> sol;
 
-    public String getImageFilePath() {
-        return imageFilePath.get();
+    public void setList(ArrayList<Position> solList) {
+
+        this.sol = solList;
+        redraw();
     }
 
-    public void setImageFilePath(String imageFilePath) {
-        this.imageFilePath.set(imageFilePath);
+    public void clearSolution() {
+        GraphicsContext gc = getGraphicsContext2D();
+        gc.clearRect(0, 0, getWidth(), getHeight());
     }
 
 
-    public void setSolutionDisplayer(Solution sol,double width, double height, int columns, int rows) {
-        this.width = width;
-        this.height = height;
-        this.columns = columns;
-        this.rows = rows;
-        this.solution=sol;
-        initialize(rows, columns);
-        getChildren().clear();
-        draw();
-    }
+    public void redraw() {
+        if (sol != null) {
+            try {
+                Image solImage = new Image(new FileInputStream(ImageFileNameSol.get()));
 
-    private void initialize(int rows, int columns) {
-        for (int i = 0; i < rows; i++) {
-            addRow(i);
-        }
+                GraphicsContext gc = getGraphicsContext2D();
+                gc.clearRect(0, 0, getWidth(), getHeight());
 
-        for (int j = 0; j < columns; j++) {
-            addColumn(j);
-        }
-    }
-
-    public void draw() {
-//        if (Solution != null) {
-        double cellHeight = height / rows;
-        double cellWidth = width / columns;
-        ArrayList<AState> solList = solution.getSolutionPath();
-        try {
-            //Draw Maze
-            for (int i = 0; i < solList.size(); i++) {
-                String[] s = solList.get(i).toString().split(" ");
-                int r = Integer.parseInt(s[1]);
-                int c = Integer.parseInt((s[3].split("\'"))[0]);
-                Cell cell = new Cell(cellWidth, cellHeight, imageFilePath.toString());
-                add(cell, c, r);
-
-                cell.draw();
+                //Draw Sol
+                for (Position cord : sol) {
+                    gc.drawImage(solImage, cord.getColumnIndex() * getCellWidth(), cord.getRowIndex() * getCellHeight(), getCellWidth(), getCellHeight());
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
-
         }
-        catch (Exception e) {
-        }
+    }
 
+    private StringProperty ImageFileNameSol = new SimpleStringProperty();
+
+    public String getImageFileNameSol() {
+        return ImageFileNameSol.get();
+    }
+
+    public void setImageFileNameSol(String imageFileNameSol) {
+        this.ImageFileNameSol.set(imageFileNameSol);
     }
 }

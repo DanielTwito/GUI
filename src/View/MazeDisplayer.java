@@ -4,60 +4,55 @@ import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.scene.layout.GridPane;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
-public class MazeDisplayer extends GridPane {
-    private double width;
-    private double height;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+public class MazeDisplayer extends Displayer {
     private Maze maze;
 
-    private StringProperty imageFilePath = new SimpleStringProperty();
 
-    public String getImageFilePath() {
-        return imageFilePath.get();
-    }
-
-    public void setImageFilePath(String imageFilePath) {
-        this.imageFilePath.set(imageFilePath);
-    }
-
-    public void setMaze(Maze maze, double width, double height) {
+    public void setMaze(Maze maze) {
         this.maze = maze;
-        this.width = width;
-        this.height = height;
-        initialize(maze.getRow(), maze.getCol());
-        getChildren().clear();
-        draw();
+        redraw();
     }
 
-    private void initialize(int rows, int columns) {
-        for (int i = 0; i < rows; i++) {
-            addRow(i);
-        }
-
-        for (int j = 0; j < columns; j++) {
-            addColumn(j);
-        }
-    }
-
-    public void draw() {
+    public void redraw() {
         if (maze != null) {
-            double cellHeight = height / maze.getRow();
-            double cellWidth = width / maze.getCol();
             try {
+                Image wallImage = new Image(new FileInputStream(imageFileNameWall.get()));
+                GraphicsContext gc = getGraphicsContext2D();
+                gc.clearRect(0, 0, getWidth(), getHeight());
+
                 //Draw Maze
-                for (int row = 0; row < maze.getRow(); row++) {
-                    for (int column = 0; column < maze.getCol(); column++) {
-                        if (maze.getValueAt(new Position(row,column)) == 1) {
-                            Cell cell = new Cell(cellWidth, cellHeight, imageFilePath.toString());
-                            add(cell,column , row);
-                            cell.draw();
+                for (int i = 0; i < maze.getRow(); i++) {
+                    for (int j = 0; j <maze.getCol(); j++) {
+                        if (maze.getValueAt(new Position(i,j)) == 1) {
+                            gc.drawImage(wallImage, j * getCellWidth(), i * getCellHeight(), getCellWidth(), getCellHeight());
                         }
                     }
                 }
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
         }
     }
+
+    //region Properties
+    private StringProperty imageFileNameWall = new SimpleStringProperty();
+
+
+
+    public String getImageFileNameWall() {
+        return imageFileNameWall.get();
+    }
+
+    public void setImageFileNameWall(String imageFileNameWall) {
+        this.imageFileNameWall.set(imageFileNameWall);
+    }
     //endregion
+
 }

@@ -13,23 +13,24 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane onKeyPressed="#KeyPressed" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+<BorderPane fx:id="rootPane" onKeyPressed="#KeyPressed" prefHeight="307.0" prefWidth="427.0" stylesheets="@MyStyle.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
     <left>
-        <VBox prefHeight="200.0" prefWidth="178.0" spacing="5.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="256.0" prefWidth="220.0" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
-                <GridPane>
+                <GridPane prefHeight="208.0" prefWidth="264.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -39,12 +40,12 @@
                     <Label text="Maze columns:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                     <TextField fx:id="txtfld_rowsNum" disable="false" text="10" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                     <TextField fx:id="txtfld_columnsNum" disable="false" text="10" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                    <Button fx:id="btn_generateMaze" onAction="#generateMaze" prefHeight="25.0" prefWidth="167.0" text="Generate Maze" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                    <Button cancelButton="false" onAction="#solveMaze" prefHeight="25.0" prefWidth="167.0" text="Solve Maze" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                    <Button fx:id="btn_generateMaze" onAction="#generateMaze" prefHeight="32.0" prefWidth="225.0" text="Generate Maze" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                    <Button fx:id="btn_solveMaze" cancelButton="true" onAction="#solveMaze" prefHeight="32.0" prefWidth="233.0" text="Solve Maze" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                     <Label text="Char row:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                     <Label text="Char column:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                     <Label fx:id="lbl_rowsNum" text="${controller.characterPositionRow}" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                    <Label fx:id="lbl_columnsNum" text="${controller.characterPositionColumn}" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    <Label fx:id="lbl_columnsNum" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                     <!--<Label GridPane.columnIndex="1" GridPane.rowIndex="4" text="${controller.characterPositionRow}" />-->
                     <!--<Label GridPane.columnIndex="1" GridPane.rowIndex="5" text="${controller.characterPositionColumn}"/>-->
                     <!--                    <ChoiceBox value="2 minutes" GridPane.columnIndex="1" GridPane.rowIndex="6">
@@ -64,7 +65,11 @@
         </VBox>
     </left>
     <bottom>
-
+        <HBox prefHeight="26.0" prefWidth="113.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Status bar" />
+            </children>
+        </HBox>
     </bottom>
     <top>
         <VBox BorderPane.alignment="CENTER">
@@ -73,7 +78,10 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Close" />
+                                <MenuItem fx:id="menu_new" mnemonicParsing="false" onAction="#generateMaze" text="New" />
+                                <!--<MenuItem fx:id="menu_open" mnemonicParsing="false" onAction="#loadMaze" text="Open" />-->
+                                <!--<MenuItem fx:id="menu_save" mnemonicParsing="false" onAction="#saveMaze" text="Save" />-->
+                                <MenuItem fx:id="menu_close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Edit">
@@ -92,50 +100,15 @@
         </VBox>
     </top>
     <center>
-
-        <GridPane BorderPane.alignment="CENTER">
+        <Pane fx:id="mainPane" BorderPane.alignment="CENTER">
             <children>
-                <SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg"/>
-                <MazeDisplayer fx:id="mazeDisplayer" imageFilePath="resources/Images/wall1.jpg" />
-                <CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>
-
+                <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/wall1.jpg" width="${mainPane.width}" />
+                <SolutionDisplayer fx:id="solutionDisplayer" height="${mainPane.height}" imageFileNameSol="resources/Images/wall3.jpg" width="${mainPane.width}" />
+                <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character1.jpg" imageFileNameGoal="resources/Images/wall2.jpg" width="${mainPane.width}" />
             </children>
-        </GridPane>
-
-        <!--<GridPane BorderPane.alignment="CENTER">-->
-            <!--<children>-->
-                <!--<SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg"/>-->
-            <!--</children>-->
-        <!--</GridPane>-->
-        <!--<GridPane BorderPane.alignment="CENTER">-->
-            <!--<children>-->
-                <!--<CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>-->
-            <!--</children>-->
-        <!--</GridPane>-->
-
-
-                    <!--<GridPane  BorderPane.alignment="CENTER">-->
-                        <!--<children>-->
-                            <!--<SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg" />-->
-                                <!--<GridPane  BorderPane.alignment="CENTER">-->
-                                    <!--<children>-->
-                                        <!--<CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg" />-->
-                                    <!--</children>-->
-                                <!--</GridPane>-->
-                        <!--</children>-->
-                    <!--</GridPane>-->
-
-        <!--<Pane> prefWidth="256.0" BorderPane.alignment="CENTER">-->
-        <!--<children>-->
-            <!--<MazeDisplayer fx:id="mazeDisplayer" imageFilePath="resources/Images/wall1.jpg" />-->
-            <!--<SolutionDisplayer fx:id="solutionDisplayer" imageFilePath="resources/Images/wall2.jpg"/>-->
-            <!--<CharacterDisplayer fx:id="characterDisplayer" imageFilePath="resources/Images/character1.jpg"/>-->
-        <!--</children>-->
-        <!--<padding>-->
-            <!--<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />-->
-        <!--</padding>-->
-
-    <!--</Pane>-->
-
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </Pane>
     </center>
 </BorderPane>

@@ -7,6 +7,7 @@ import Server.Server;
 import Server.ServerStrategyGenerateMaze;
 import Server.ServerStrategySolveSearchProblem;
 import algorithms.mazeGenerators.Maze;
+import algorithms.search.AState;
 import algorithms.search.Solution;
 import javafx.scene.input.KeyCode;
 
@@ -14,6 +15,8 @@ import algorithms.mazeGenerators.Position;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +27,7 @@ public class Model extends Observable implements IModel{
 
     Server mazeGeneratingServer;
     Server solveSearchProblemServer;
+    boolean isReached = false;
 
     public Model() {
         //Raise the servers
@@ -72,6 +76,7 @@ public class Model extends Observable implements IModel{
                         maze = new Maze(decompressedMaze);
                         characterPositionRow=maze.getStartPosition().getRowIndex();
                         characterPositionColumn=maze.getStartPosition().getColumnIndex();
+                        isReached=false;
                         //maze.print();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -80,14 +85,14 @@ public class Model extends Observable implements IModel{
             });
             client.communicateWithServer();
             setChanged();
-            notifyObservers();
+            notifyObservers("maze");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void solveMaze(Maze maze) {
+    public void solveMaze() {
         try {
             Client client = new Client(InetAddress.getLocalHost(), 5401, new IClientStrategy() {
                 @Override
@@ -99,13 +104,6 @@ public class Model extends Observable implements IModel{
                         toServer.writeObject(maze); //send maze to server
                         toServer.flush();
                         mazeSolution = (Solution) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
-/*
-                        //Print Maze Solution retrieved from the server
-                        System.out.println(String.format("Solution steps: %s", mazeSolution));
-                        ArrayList<AState> mazeSolutionSteps = mazeSolution.getSolutionPath();
-                        for (int i = 0; i < mazeSolutionSteps.size(); i++) {
-                            System.out.println(String.format("%s. %s", i, mazeSolutionSteps.get(i).toString()));
-                        }*/
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -113,7 +111,7 @@ public class Model extends Observable implements IModel{
             });
             client.communicateWithServer();
             setChanged();
-            notifyObservers();
+            notifyObservers("solve");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -128,41 +126,41 @@ public class Model extends Observable implements IModel{
     @Override
     public void moveCharacter(KeyCode movement) {
         switch (movement) {
-            case NUMPAD8:
+            case DIGIT8:
                 if(checkIfLegal(characterPositionRow-1,characterPositionColumn))
                     characterPositionRow--;
                 break;
-            case NUMPAD2:
+            case DIGIT2:
                 if(checkIfLegal(characterPositionRow+1,characterPositionColumn))
                     characterPositionRow++;
                 break;
-            case NUMPAD6:
+            case DIGIT6:
                 if(checkIfLegal(characterPositionRow,characterPositionColumn+1))
                     characterPositionColumn++;
                 break;
-            case NUMPAD4:
+            case DIGIT4:
                 if(checkIfLegal(characterPositionRow,characterPositionColumn-1))
                     characterPositionColumn--;
                 break;
-            case NUMPAD9:
+            case DIGIT9:
                 if(checkIfLegal(characterPositionRow-1,characterPositionColumn+1)) {
                     characterPositionRow--;
                     characterPositionColumn++;
                 }
                 break;
-            case NUMPAD7:
+            case DIGIT7:
                 if(checkIfLegal(characterPositionRow-1,characterPositionColumn-1)) {
                     characterPositionRow--;
                     characterPositionColumn--;
                 }
                 break;
-            case NUMPAD3:
+            case DIGIT3:
                 if(checkIfLegal(characterPositionRow+1,characterPositionColumn+1)) {
                     characterPositionRow++;
                     characterPositionColumn++;
                 }
                 break;
-            case NUMPAD1:
+            case DIGIT1:
                 if(checkIfLegal(characterPositionRow-1,characterPositionColumn-1)) {
                     characterPositionRow++;
                     characterPositionColumn--;
@@ -171,8 +169,15 @@ public class Model extends Observable implements IModel{
 
 
         }
+        reachGoal();
         setChanged();
-        notifyObservers();
+        notifyObservers("character");
+    }
+
+    private void reachGoal() {
+        if (characterPositionColumn == maze.getGoalPosition().getColumnIndex() &&
+                characterPositionRow == maze.getGoalPosition().getRowIndex())
+            isReached = true;
     }
 
     private boolean checkIfLegal(int row, int column) {
@@ -197,7 +202,21 @@ public class Model extends Observable implements IModel{
         return characterPositionColumn;
     }
 
-    public Solution getMazeSolution() {
-        return mazeSolution;
+
+    @Override
+    public boolean isReached() {
+        return isReached;
+    }
+
+    @Override
+    public ArrayList<Position> getSolutionPath() {
+        ArrayList<Position> sol = new ArrayList<>();
+        for(AState st :  mazeSolution.getSolutionPath() ){
+            String[] s = st.toString().split(" ");
+            int r = Integer.parseInt(s[1]);
+            int c = Integer.parseInt((s[3].split("\'"))[0]);
+            sol.add(new Position(r,c));
+        }
+        return sol;
     }
 }
