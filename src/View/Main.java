@@ -33,7 +33,7 @@ public class Main extends Application {
         primaryStage.setTitle("The Amazing Maze");
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("MyView.fxml").openStream());
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 1100, 600);
         scene.getStylesheets().add(getClass().getResource("MyStyle.css").toExternalForm());
         primaryStage.setScene(scene);
         //---------

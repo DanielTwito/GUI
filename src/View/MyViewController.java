@@ -337,10 +337,6 @@ public class MyViewController implements Observer, IView {
 
     public void mousePressed(MouseEvent mouseEvent) {
 
-//        double x=characterDisplayer.getHeight()/mouseEvent.getSceneX();
-//        double t=characterDisplayer.getWidth();
-//        double row=t/mouseEvent.getSceneY();
-
         double col=mouseEvent.getSceneX()-220.0;
         double row=mouseEvent.getSceneY()-25.0;
 
@@ -348,13 +344,7 @@ public class MyViewController implements Observer, IView {
         int row2=(int)(row/characterDisplayer.getCellHeight());
         if(viewModel.getCharacterPositionColumn()==col2 && viewModel.getCharacterPositionRow()==row2)
             onCharPressed=true;
-        viewModel.moveCharacterMouse(row2,col2);
         System.out.println("col:"+col2+"   row:"+row2);
-        //characterPositionColumn * getCellWidth()
-        //showAlert("col:"+col2+"     "+"row:"+row2+"     "+"");
-
-        //characterPositionColumn * getCellWidth()
-        //showAlert(x+"     "+characterDisplayer.getCellWidth()* characterDisplayer.getCharacterPositionColumn() + "");
 
     }
 
@@ -365,7 +355,7 @@ public class MyViewController implements Observer, IView {
         int row2=(int)((mouseEvent.getSceneY()-25.0)/characterDisplayer.getCellHeight());
         if(onCharPressed)
             viewModel.moveCharacterMouse(row2,col2);
-        System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
+        //System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
 
     }
     //endregion

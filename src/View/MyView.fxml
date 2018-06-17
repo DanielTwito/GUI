@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="rootPane" onKeyPressed="#KeyPressed" onScroll="#scrollInOut" prefHeight="307.0" prefWidth="427.0" stylesheets="@MyStyle.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+<BorderPane fx:id="rootPane" onKeyPressed="#KeyPressed" onScroll="#scrollInOut" prefHeight="307.0" prefWidth="427.0" stylesheets="@../../resources/MyStyle.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
     <left>
         <VBox prefHeight="256.0" prefWidth="220.0" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
@@ -96,7 +96,7 @@
     <center>
         <Pane fx:id="mainPane" BorderPane.alignment="CENTER">
             <children>
-                <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/wall4.jpg" width="${mainPane.width}" />
+                <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/money.jpg" width="${mainPane.width}" />
                 <SolutionDisplayer fx:id="solutionDisplayer" height="${mainPane.height}" imageFileNameSol="resources/Images/wall3.jpg" width="${mainPane.width}" />
                 <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character2.png" imageFileNameGoal="resources/Images/destImage.jpg" onMouseDragged="#mouseReleased" onMousePressed="#mousePressed" width="${mainPane.width}" />
             </children>
