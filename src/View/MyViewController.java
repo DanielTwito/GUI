@@ -29,7 +29,6 @@ import javafx.util.Duration;
 import javax.print.attribute.URISyntax;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
 
