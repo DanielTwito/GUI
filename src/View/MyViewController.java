@@ -82,6 +82,10 @@ public class MyViewController implements Observer, IView {
             }
 
             if(arg.toString()=="character") {
+                MediaPlayer mp1;
+                String path = new File("resources\\Sound\\move.mp3").toURI().toString();
+                mp1= new MediaPlayer(new Media(path));
+                mp1.play();
                 displayCharactetr();
                 if (!isReached) {
                     Position end = viewModel.getMaze().getGoalPosition();
@@ -193,17 +197,17 @@ public class MyViewController implements Observer, IView {
 
 
     public void KeyPressed(KeyEvent keyEvent) {
-        MediaPlayer mp1;
-        String path = new File("resources\\Sound\\move.mp3").toURI().toString();
-        mp1= new MediaPlayer(new Media(path));
-        if(!isReached)
-            mp1.setVolume(0.55);
+//        MediaPlayer mp1;
+//        String path = new File("resources\\Sound\\move.mp3").toURI().toString();
+//        mp1= new MediaPlayer(new Media(path));
+//        if(!isReached)
+//            mp1.setVolume(0.55);
         KeyCode kc =keyEvent.getCode();
         if(kc==KeyCode.DIGIT1 ||kc==KeyCode.DIGIT2 ||kc==KeyCode.DIGIT3
                 ||kc==KeyCode.DIGIT4 ||kc==KeyCode.DIGIT6 ||kc==KeyCode.DIGIT7||kc==KeyCode.DIGIT8 || kc==KeyCode.DIGIT9
                 ||kc==KeyCode.NUMPAD1 ||kc==KeyCode.NUMPAD2 ||kc==KeyCode.NUMPAD3
                 ||kc==KeyCode.NUMPAD4 ||kc==KeyCode.NUMPAD6 ||kc==KeyCode.NUMPAD7||kc==KeyCode.NUMPAD8 || kc==KeyCode.NUMPAD9)
-            mp1.play();
+//            mp1.play();
         viewModel.moveCharacter(keyEvent.getCode());
         keyEvent.consume();
     }
@@ -359,7 +363,6 @@ public class MyViewController implements Observer, IView {
         int row2=(int)((mouseEvent.getSceneY()-25.0)/characterDisplayer.getCellHeight());
         if(onCharPressed)
             viewModel.moveCharacterMouse(row2,col2);
-        reachGoal();
         System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
 
     }
