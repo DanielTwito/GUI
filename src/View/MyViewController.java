@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,6 +36,7 @@ public class MyViewController implements Observer, IView {
     public MazeDisplayer mazeDisplayer;
     public CharacterDisplayer characterDisplayer;
     public SolutionDisplayer solutionDisplayer;
+    public Canvas picDisplayer;
     public javafx.scene.layout.BorderPane rootPane;
     public javafx.scene.control.TextField txtfld_rowsNum;
     public javafx.scene.control.TextField txtfld_columnsNum;
@@ -52,9 +55,6 @@ public class MyViewController implements Observer, IView {
         btn_solveMaze.setDisable(true);
         //  menu_save.setDisable(true);
         bindProperties(viewModel);
-
-
-
 
     }
 
@@ -82,10 +82,6 @@ public class MyViewController implements Observer, IView {
             }
 
             if(arg.toString()=="character") {
-                MediaPlayer mp1;
-                String path = new File("resources\\Sound\\move.mp3").toURI().toString();
-                mp1= new MediaPlayer(new Media(path));
-                mp1.play();
                 displayCharactetr();
                 if (!isReached) {
                     Position end = viewModel.getMaze().getGoalPosition();
@@ -144,6 +140,8 @@ public class MyViewController implements Observer, IView {
     }
 
     public void generateMaze() {
+        GraphicsContext gc = picDisplayer.getGraphicsContext2D();
+        gc.clearRect(0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
         if(mp!=null)
             mp.stop();
         isReached=false;
@@ -197,17 +195,17 @@ public class MyViewController implements Observer, IView {
 
 
     public void KeyPressed(KeyEvent keyEvent) {
-//        MediaPlayer mp1;
-//        String path = new File("resources\\Sound\\move.mp3").toURI().toString();
-//        mp1= new MediaPlayer(new Media(path));
-//        if(!isReached)
-//            mp1.setVolume(0.55);
+        MediaPlayer mp1;
+        String path = new File("resources\\Sound\\move.mp3").toURI().toString();
+        mp1= new MediaPlayer(new Media(path));
+        if(!isReached)
+            mp1.setVolume(0.55);
         KeyCode kc =keyEvent.getCode();
         if(kc==KeyCode.DIGIT1 ||kc==KeyCode.DIGIT2 ||kc==KeyCode.DIGIT3
                 ||kc==KeyCode.DIGIT4 ||kc==KeyCode.DIGIT6 ||kc==KeyCode.DIGIT7||kc==KeyCode.DIGIT8 || kc==KeyCode.DIGIT9
                 ||kc==KeyCode.NUMPAD1 ||kc==KeyCode.NUMPAD2 ||kc==KeyCode.NUMPAD3
                 ||kc==KeyCode.NUMPAD4 ||kc==KeyCode.NUMPAD6 ||kc==KeyCode.NUMPAD7||kc==KeyCode.NUMPAD8 || kc==KeyCode.NUMPAD9)
-//            mp1.play();
+            mp1.play();
         viewModel.moveCharacter(keyEvent.getCode());
         keyEvent.consume();
     }
@@ -363,7 +361,7 @@ public class MyViewController implements Observer, IView {
         int row2=(int)((mouseEvent.getSceneY()-25.0)/characterDisplayer.getCellHeight());
         if(onCharPressed)
             viewModel.moveCharacterMouse(row2,col2);
-        System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
+        //System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
 
     }
 
@@ -381,6 +379,18 @@ public class MyViewController implements Observer, IView {
             stage.show();
         } catch (Exception e) {
 
+        }
+    }
+
+    public void entryShow() {
+
+        GraphicsContext gc = picDisplayer.getGraphicsContext2D();
+        gc.clearRect(0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
+
+        try {
+            gc.drawImage(new Image(new FileInputStream("resources/Images/opening.jpg")), 0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
     //endregion

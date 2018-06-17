@@ -289,14 +289,13 @@ public class Model extends Observable implements IModel{
     @Override
     public void moveCharacterMouse(int row, int col) {
 
-        if(checkIfLegal(row,col)){
+        if(checkIfLegal(row,col) && (characterPositionRow!=row || characterPositionColumn != col)){
             characterPositionColumn=col;
             characterPositionRow=row;
+            reachGoal();
+            setChanged();
+            notifyObservers("character");
         }
-        reachGoal();
-        setChanged();
-        notifyObservers("character");
-
 
     }
 

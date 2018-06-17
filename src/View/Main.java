@@ -44,6 +44,7 @@ public class Main extends Application {
         //---------
         SetStageCloseEvent(primaryStage);
         primaryStage.show();
+        view.entryShow();
 
     }
 

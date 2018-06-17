@@ -96,4 +96,5 @@ public class ViewModel extends Observable implements Observer {
             model.moveCharacterMouse(row,col);
         //}
     }
+
 }
