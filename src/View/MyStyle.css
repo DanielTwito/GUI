@@ -1,5 +1,7 @@
 .root {
     -fx-background-color: Grey;
+    /*background: url("file://D:\opning.jpg") repeat;*/
+
 }
 
 Label{
@@ -24,4 +26,10 @@ Button:hover{
     -fx-text-fill: -fx-text-base-color;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
+}
+
+Image{
+
+
+
 }
