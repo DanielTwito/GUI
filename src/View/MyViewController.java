@@ -82,7 +82,11 @@ public class MyViewController implements Observer, IView {
             }
 
             if(arg.toString()=="character") {
+                MediaPlayer mp1;
+                String path = new File("resources\\Sound\\move.mp3").toURI().toString();
+                mp1= new MediaPlayer(new Media(path));
                 displayCharactetr();
+                mp1.play();
                 if (!isReached) {
                     Position end = viewModel.getMaze().getGoalPosition();
                     characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
@@ -180,7 +184,7 @@ public class MyViewController implements Observer, IView {
         showAlert("Amazing..!!!\nYou found El Professor!!");
         String path = new File("resources\\Sound\\finish.mp3").toURI().toString();
         mp2 = new MediaPlayer( new Media(path));
-        mp2.setStartTime(new Duration(14000));
+        mp2.setStartTime(new Duration(13000));
         mp2.setStopTime(new Duration(45000));
         mp2.play();
 
