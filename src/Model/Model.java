@@ -285,6 +285,21 @@ public class Model extends Observable implements IModel{
         }
         return sol;
     }
+
+    @Override
+    public void moveCharacterMouse(int row, int col) {
+
+        if(checkIfLegal(row,col)){
+            characterPositionColumn=col;
+            characterPositionRow=row;
+        }
+        reachGoal();
+        setChanged();
+        notifyObservers("character");
+
+
+    }
+
     @Override
     public void loadMaze(File file){
         try {

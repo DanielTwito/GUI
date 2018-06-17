@@ -90,4 +90,10 @@ public class ViewModel extends Observable implements Observer {
     }
 
 
+    public void moveCharacterMouse(int row, int col) {
+
+        //if(characterPositionColumnIndex==col && characterPositionRowIndex==row){
+            model.moveCharacterMouse(row,col);
+        //}
+    }
 }

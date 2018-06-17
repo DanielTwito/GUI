@@ -93,7 +93,7 @@
             <children>
                 <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/wall1.jpg" width="${mainPane.width}" />
                 <SolutionDisplayer fx:id="solutionDisplayer" height="${mainPane.height}" imageFileNameSol="resources/Images/wall3.jpg" width="${mainPane.width}" />
-                <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character1.jpg" imageFileNameGoal="resources/Images/wall2.jpg" width="${mainPane.width}" />
+                <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character1.jpg" imageFileNameGoal="resources/Images/wall2.jpg" onMouseDragged="#mouseReleased" onMousePressed="#mousePressed" width="${mainPane.width}" />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

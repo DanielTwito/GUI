@@ -21,6 +21,8 @@ public class Main extends Application {
     Model model;
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        double x= 6+12*3-5/2;
         model = new Model();
         model.startServers();
         ViewModel viewModel = new ViewModel(model);
@@ -34,7 +36,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         //---------
         MyViewController view = fxmlLoader.getController() ;
-        //view.setResizeEvent(scene);
+        view.setResizeEvent(scene);
         view.setViewModel(viewModel);
         viewModel.addObserver(view);
         //---------

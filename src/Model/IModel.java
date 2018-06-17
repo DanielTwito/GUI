@@ -30,4 +30,6 @@ public interface IModel {
     public void saveMaze(File file);
 
     ArrayList<Position> getSolutionPath();
+
+    void moveCharacterMouse(int row, int col);
 }
