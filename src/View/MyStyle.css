@@ -13,7 +13,7 @@ Button {
     -fx-font-family: "Arial Black";
     -fx-font-weight: bold;
     -fx-font-size: 14;
-    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-background-color: linear-gradient(#f50000, #2A5058);
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
@@ -27,8 +27,3 @@ Button:hover{
     -fx-content-display: LEFT;
 }
 
-Image{
-
-
-
-}
