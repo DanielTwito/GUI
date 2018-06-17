@@ -209,7 +209,7 @@ public class MyViewController implements Observer, IView {
         keyEvent.consume();
     }
 
-    //region String Property for Binding
+    //region String Property for Bindin
     public StringProperty characterPositionRow = new SimpleStringProperty();
 
     public StringProperty characterPositionColumn = new SimpleStringProperty();
