@@ -23,6 +23,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,6 +36,7 @@ public class MyViewController implements Observer, IView {
     public MazeDisplayer mazeDisplayer;
     public CharacterDisplayer characterDisplayer;
     public SolutionDisplayer solutionDisplayer;
+    public Canvas picDisplayer;
     public javafx.scene.layout.BorderPane rootPane;
     public javafx.scene.control.TextField txtfld_rowsNum;
     public javafx.scene.control.TextField txtfld_columnsNum;
@@ -52,9 +55,6 @@ public class MyViewController implements Observer, IView {
         btn_solveMaze.setDisable(true);
         //  menu_save.setDisable(true);
         bindProperties(viewModel);
-
-
-
 
     }
 
@@ -140,6 +140,8 @@ public class MyViewController implements Observer, IView {
     }
 
     public void generateMaze() {
+        GraphicsContext gc = picDisplayer.getGraphicsContext2D();
+        gc.clearRect(0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
         if(mp!=null)
             mp.stop();
         isReached=false;
@@ -359,8 +361,7 @@ public class MyViewController implements Observer, IView {
         int row2=(int)((mouseEvent.getSceneY()-25.0)/characterDisplayer.getCellHeight());
         if(onCharPressed)
             viewModel.moveCharacterMouse(row2,col2);
-        reachGoal();
-        System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
+        //System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
 
     }
 
@@ -378,6 +379,18 @@ public class MyViewController implements Observer, IView {
             stage.show();
         } catch (Exception e) {
 
+        }
+    }
+
+    public void entryShow() {
+
+        GraphicsContext gc = picDisplayer.getGraphicsContext2D();
+        gc.clearRect(0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
+
+        try {
+            gc.drawImage(new Image(new FileInputStream("resources/Images/opening.jpg")), 0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
     //endregion
