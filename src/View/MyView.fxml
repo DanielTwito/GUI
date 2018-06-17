@@ -4,6 +4,7 @@
 <?import View.MazeDisplayer?>
 <?import View.SolutionDisplayer?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -18,7 +19,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.canvas.Canvas?>
 <BorderPane fx:id="rootPane" onKeyPressed="#KeyPressed" onScroll="#scrollInOut" prefHeight="307.0" prefWidth="427.0" stylesheets="@../../resources/MyStyle.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
     <left>
         <VBox prefHeight="256.0" prefWidth="220.0" spacing="5.0" BorderPane.alignment="CENTER">
@@ -98,10 +98,10 @@
     <center>
         <Pane fx:id="mainPane" BorderPane.alignment="CENTER">
             <children>
-                <Canvas fx:id="picDisplayer" height="${mainPane.height}"  width="${mainPane.width}" />
+                <Canvas fx:id="picDisplayer" height="${mainPane.height}" width="${mainPane.width}" />
                 <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/mony.jpg" width="${mainPane.width}" />
                 <SolutionDisplayer fx:id="solutionDisplayer" height="${mainPane.height}" imageFileNameSol="resources/Images/wall1.jpg" width="${mainPane.width}" />
-                <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character2.png" imageFileNameGoal="resources/Images/destImage.jpg" onMouseDragged="#mouseReleased" onMousePressed="#mousePressed" width="${mainPane.width}" />
+                <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character2.png" imageFileNameGoal="resources/Images/destImage.jpg" onMouseDragged="#mouseDrag" onMousePressed="#mousePressed" onMouseReleased="#mouseReleased" width="${mainPane.width}" />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

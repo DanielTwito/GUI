@@ -365,7 +365,7 @@ public class MyViewController implements Observer, IView {
         System.out.println("col:"+col2+"   row:"+row2);
     }
 
-    public void mouseReleased(MouseEvent mouseEvent) {
+    public void mouseDrag(MouseEvent mouseEvent) {
 
 
         int col2=(int)((mouseEvent.getSceneX()-220.0)/characterDisplayer.getCellWidth());
@@ -373,6 +373,12 @@ public class MyViewController implements Observer, IView {
         if(onCharPressed)
             viewModel.moveCharacterMouse(row2,col2);
         //System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
+
+    }
+
+    public void mouseReleased(MouseEvent mouseEvent) {
+
+        onCharPressed=false;
 
     }
 
