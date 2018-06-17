@@ -177,7 +177,7 @@ public class MyViewController implements Observer, IView {
         btn_solveMaze.setDisable(true);
         isReached=true;
         mp.stop();
-        showAlert("Amazing..");
+        showAlert("Amazing..!!!\nYou found El Professor!!");
         String path = new File("resources\\Sound\\finish.mp3").toURI().toString();
         mp2 = new MediaPlayer( new Media(path));
         mp2.setStartTime(new Duration(14000));
