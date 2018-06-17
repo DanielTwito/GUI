@@ -14,10 +14,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.ZoomEvent;
+import javafx.scene.input.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -48,6 +45,7 @@ public class MyViewController implements Observer, IView {
 
     private MediaPlayer mp;
     private MediaPlayer mp2;
+    private boolean onCharPressed=false;
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
@@ -335,6 +333,40 @@ public class MyViewController implements Observer, IView {
         } catch (NullPointerException e) {
             scrollEvent.consume();
         }
+    }
+
+    public void mousePressed(MouseEvent mouseEvent) {
+
+//        double x=characterDisplayer.getHeight()/mouseEvent.getSceneX();
+//        double t=characterDisplayer.getWidth();
+//        double row=t/mouseEvent.getSceneY();
+
+        double col=mouseEvent.getSceneX()-220.0;
+        double row=mouseEvent.getSceneY()-25.0;
+
+        int col2=(int)(col/characterDisplayer.getCellWidth());
+        int row2=(int)(row/characterDisplayer.getCellHeight());
+        if(viewModel.getCharacterPositionColumn()==col2 && viewModel.getCharacterPositionRow()==row2)
+            onCharPressed=true;
+        viewModel.moveCharacterMouse(row2,col2);
+        System.out.println("col:"+col2+"   row:"+row2);
+        //characterPositionColumn * getCellWidth()
+        //showAlert("col:"+col2+"     "+"row:"+row2+"     "+"");
+
+        //characterPositionColumn * getCellWidth()
+        //showAlert(x+"     "+characterDisplayer.getCellWidth()* characterDisplayer.getCharacterPositionColumn() + "");
+
+    }
+
+    public void mouseReleased(MouseEvent mouseEvent) {
+
+
+        int col2=(int)((mouseEvent.getSceneX()-220.0)/characterDisplayer.getCellWidth());
+        int row2=(int)((mouseEvent.getSceneY()-25.0)/characterDisplayer.getCellHeight());
+        if(onCharPressed)
+            viewModel.moveCharacterMouse(row2,col2);
+        System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
+
     }
     //endregion
 
