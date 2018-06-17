@@ -30,7 +30,7 @@ public class Main extends Application {
         ViewModel viewModel = new ViewModel(model);
         model.addObserver(viewModel);
         //---------
-        primaryStage.setTitle("The Amazing Maze");
+        primaryStage.setTitle("Casa De Papel Maze");
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("MyView.fxml").openStream());
         Scene scene = new Scene(root, 1100, 600);
@@ -63,6 +63,7 @@ public class Main extends Application {
                 }
             }
         });
+
     }
 
 

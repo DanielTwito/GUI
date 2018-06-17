@@ -81,6 +81,7 @@
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#About" text="About" />
+                                <MenuItem mnemonicParsing="false" onAction="#GameRules" text="Game Rules" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Options">

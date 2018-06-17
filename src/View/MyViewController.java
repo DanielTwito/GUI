@@ -41,7 +41,7 @@ public class MyViewController implements Observer, IView {
     public javafx.scene.control.Label lbl_columnsNum;
     public javafx.scene.control.Button btn_generateMaze;
     public javafx.scene.control.Button btn_solveMaze;
-   // public javafx.scene.control.MenuItem menu_save;
+    // public javafx.scene.control.MenuItem menu_save;
 
     private MediaPlayer mp;
     private MediaPlayer mp2;
@@ -50,7 +50,7 @@ public class MyViewController implements Observer, IView {
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
         btn_solveMaze.setDisable(true);
-      //  menu_save.setDisable(true);
+        //  menu_save.setDisable(true);
         bindProperties(viewModel);
 
 
@@ -77,7 +77,7 @@ public class MyViewController implements Observer, IView {
                 displayMaze(viewModel.getMaze());
                 displayCharactetr();
                 Position end = viewModel.getMaze().getGoalPosition();
-               characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
+                characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
 
             }
 
@@ -105,7 +105,7 @@ public class MyViewController implements Observer, IView {
                     displayMaze(maze);
                     displayCharactetr();
                     characterDisplayer.drawAt(maze.getGoalPosition().getRowIndex(),
-                                              maze.getGoalPosition().getColumnIndex(), characterDisplayer.getImageFileNameGoal());
+                            maze.getGoalPosition().getColumnIndex(), characterDisplayer.getImageFileNameGoal());
 
 
 
@@ -140,11 +140,14 @@ public class MyViewController implements Observer, IView {
     }
 
     public void generateMaze() {
+        if(mp!=null)
+            mp.stop();
         isReached=false;
         String path = new File("resources\\Sound\\background.mp3").toURI().toString();
         mp = new MediaPlayer(new Media(path));
-        if(mp2!=null)
-                mp2.stop();
+        if(mp2!=null) {
+            mp2.stop();
+        }
         try {
             int heigth = Integer.valueOf(txtfld_rowsNum.getText());
             int width = Integer.valueOf(txtfld_columnsNum.getText());
@@ -175,7 +178,7 @@ public class MyViewController implements Observer, IView {
         showAlert("Amazing..");
         String path = new File("resources\\Sound\\finish.mp3").toURI().toString();
         mp2 = new MediaPlayer( new Media(path));
-        mp2.setStartTime(new Duration(15500));
+        mp2.setStartTime(new Duration(14000));
         mp2.setStopTime(new Duration(45000));
         mp2.play();
 
@@ -187,19 +190,21 @@ public class MyViewController implements Observer, IView {
         alert.show();
     }
 
+
+
     public void KeyPressed(KeyEvent keyEvent) {
         MediaPlayer mp1;
         String path = new File("resources\\Sound\\move.mp3").toURI().toString();
-          mp1= new MediaPlayer(new Media(path));
+        mp1= new MediaPlayer(new Media(path));
         if(!isReached)
             mp1.setVolume(0.55);
         KeyCode kc =keyEvent.getCode();
         if(kc==KeyCode.DIGIT1 ||kc==KeyCode.DIGIT2 ||kc==KeyCode.DIGIT3
-            ||kc==KeyCode.DIGIT4 ||kc==KeyCode.DIGIT6 ||kc==KeyCode.DIGIT7||kc==KeyCode.DIGIT8 || kc==KeyCode.DIGIT9
+                ||kc==KeyCode.DIGIT4 ||kc==KeyCode.DIGIT6 ||kc==KeyCode.DIGIT7||kc==KeyCode.DIGIT8 || kc==KeyCode.DIGIT9
                 ||kc==KeyCode.NUMPAD1 ||kc==KeyCode.NUMPAD2 ||kc==KeyCode.NUMPAD3
                 ||kc==KeyCode.NUMPAD4 ||kc==KeyCode.NUMPAD6 ||kc==KeyCode.NUMPAD7||kc==KeyCode.NUMPAD8 || kc==KeyCode.NUMPAD9)
             mp1.play();
-            viewModel.moveCharacter(keyEvent.getCode());
+        viewModel.moveCharacter(keyEvent.getCode());
         keyEvent.consume();
     }
 
@@ -345,7 +350,6 @@ public class MyViewController implements Observer, IView {
         if(viewModel.getCharacterPositionColumn()==col2 && viewModel.getCharacterPositionRow()==row2)
             onCharPressed=true;
         System.out.println("col:"+col2+"   row:"+row2);
-
     }
 
     public void mouseReleased(MouseEvent mouseEvent) {
@@ -355,8 +359,26 @@ public class MyViewController implements Observer, IView {
         int row2=(int)((mouseEvent.getSceneY()-25.0)/characterDisplayer.getCellHeight());
         if(onCharPressed)
             viewModel.moveCharacterMouse(row2,col2);
-        //System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
+        reachGoal();
+        System.out.println("draggggggggggg!!!!! col:"+col2+"   row:"+row2);
 
+    }
+
+    public void GameRules(ActionEvent actionEvent) {
+
+
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("Game Rules");
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Parent root = fxmlLoader.load(getClass().getResource("GameRules.fxml").openStream());
+            Scene scene = new Scene(root, 450, 450);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
+            stage.show();
+        } catch (Exception e) {
+
+        }
     }
     //endregion
 
