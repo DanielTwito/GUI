@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="rootPane" onKeyPressed="#KeyPressed" prefHeight="307.0" prefWidth="427.0" stylesheets="@MyStyle.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
+<BorderPane fx:id="rootPane" onKeyPressed="#KeyPressed" onScroll="#scrollInOut" prefHeight="307.0" prefWidth="427.0" stylesheets="@MyStyle.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.MyViewController">
     <left>
         <VBox prefHeight="256.0" prefWidth="220.0" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
@@ -67,7 +67,7 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem fx:id="menu_new" mnemonicParsing="false" onAction="#generateMaze" text="New" />
+                                <MenuItem fx:id="menu_new" mnemonicParsing="false" onAction="#generateMaze" text="new" />
                                 <MenuItem fx:id="menu_open" mnemonicParsing="false" onAction="#loadMaze" text="Open" />
                                 <MenuItem fx:id="menu_save" mnemonicParsing="false" onAction="#saveMaze" text="Save" />
                                 <MenuItem fx:id="menu_close" mnemonicParsing="false" onAction="#closeAction" text="Close" />
@@ -83,6 +83,11 @@
                                 <MenuItem mnemonicParsing="false" onAction="#About" text="About" />
                             </items>
                         </Menu>
+                        <Menu mnemonicParsing="false" text="Options">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#Properties" text="Properties" />
+                            </items>
+                        </Menu>
                     </menus>
                 </MenuBar>
             </children>
@@ -91,9 +96,9 @@
     <center>
         <Pane fx:id="mainPane" BorderPane.alignment="CENTER">
             <children>
-                <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/wall1.jpg" width="${mainPane.width}" />
+                <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/wall4.jpg" width="${mainPane.width}" />
                 <SolutionDisplayer fx:id="solutionDisplayer" height="${mainPane.height}" imageFileNameSol="resources/Images/wall3.jpg" width="${mainPane.width}" />
-                <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character1.jpg" imageFileNameGoal="resources/Images/wall2.jpg" width="${mainPane.width}" />
+                <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character2.png" imageFileNameGoal="resources/Images/destImage.jpg" width="${mainPane.width}" />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
