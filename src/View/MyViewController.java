@@ -108,6 +108,13 @@ public class MyViewController implements Observer, IView {
                     solutionDisplayer.setDimensions(h,w);
                     displayMaze(maze);
                     displayCharactetr();
+                    if(mp!=null)
+                        mp.stop();
+                    if(mp2!=null)
+                        mp2.stop();
+                    String path = new File("resources\\Sound\\background.mp3").toURI().toString();
+                    mp = new MediaPlayer(new Media(path));
+                    mp.play();
                     characterDisplayer.drawAt(maze.getGoalPosition().getRowIndex(),
                             maze.getGoalPosition().getColumnIndex(), characterDisplayer.getImageFileNameGoal());
 
@@ -185,7 +192,6 @@ public class MyViewController implements Observer, IView {
         String path = new File("resources\\Sound\\finish.mp3").toURI().toString();
         mp2 = new MediaPlayer( new Media(path));
         mp2.setStartTime(new Duration(13000));
-        mp2.setStopTime(new Duration(45000));
         mp2.play();
 
     }
@@ -199,17 +205,17 @@ public class MyViewController implements Observer, IView {
 
 
     public void KeyPressed(KeyEvent keyEvent) {
-        MediaPlayer mp1;
-        String path = new File("resources\\Sound\\move.mp3").toURI().toString();
-        mp1= new MediaPlayer(new Media(path));
-        if(!isReached)
-            mp1.setVolume(0.55);
-        KeyCode kc =keyEvent.getCode();
-        if(kc==KeyCode.DIGIT1 ||kc==KeyCode.DIGIT2 ||kc==KeyCode.DIGIT3
-                ||kc==KeyCode.DIGIT4 ||kc==KeyCode.DIGIT6 ||kc==KeyCode.DIGIT7||kc==KeyCode.DIGIT8 || kc==KeyCode.DIGIT9
-                ||kc==KeyCode.NUMPAD1 ||kc==KeyCode.NUMPAD2 ||kc==KeyCode.NUMPAD3
-                ||kc==KeyCode.NUMPAD4 ||kc==KeyCode.NUMPAD6 ||kc==KeyCode.NUMPAD7||kc==KeyCode.NUMPAD8 || kc==KeyCode.NUMPAD9)
-            mp1.play();
+//        MediaPlayer mp1;
+//        String path = new File("resources\\Sound\\move.mp3").toURI().toString();
+//        mp1= new MediaPlayer(new Media(path));
+//        if(!isReached)
+//            mp1.setVolume(0.55);
+//        KeyCode kc =keyEvent.getCode();
+//        if(kc==KeyCode.DIGIT1 ||kc==KeyCode.DIGIT2 ||kc==KeyCode.DIGIT3
+//                ||kc==KeyCode.DIGIT4 ||kc==KeyCode.DIGIT6 ||kc==KeyCode.DIGIT7||kc==KeyCode.DIGIT8 || kc==KeyCode.DIGIT9
+//                ||kc==KeyCode.NUMPAD1 ||kc==KeyCode.NUMPAD2 ||kc==KeyCode.NUMPAD3
+//                ||kc==KeyCode.NUMPAD4 ||kc==KeyCode.NUMPAD6 ||kc==KeyCode.NUMPAD7||kc==KeyCode.NUMPAD8 || kc==KeyCode.NUMPAD9)
+//            mp1.play();
         viewModel.moveCharacter(keyEvent.getCode());
         keyEvent.consume();
     }
@@ -287,6 +293,7 @@ public class MyViewController implements Observer, IView {
         File file = fileChooser.showOpenDialog(stage);
         if(file!=null)
             viewModel.loadMaze(file);
+
 
     }
 
