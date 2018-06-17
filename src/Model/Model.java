@@ -71,7 +71,7 @@ public class Model extends Observable implements IModel{
                         toServer.flush();
                         byte[] compressedMaze = (byte[]) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
                         InputStream is = new MyDecompressorInputStream(new ByteArrayInputStream(compressedMaze));
-                        byte[] decompressedMaze = new byte[100000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
+                        byte[] decompressedMaze = new byte[100000000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
                         is.read(decompressedMaze); //Fill decompressedMaze with bytes
                         maze = new Maze(decompressedMaze);
                         characterPositionRow=maze.getStartPosition().getRowIndex();
@@ -144,29 +144,95 @@ public class Model extends Observable implements IModel{
                 break;
             case DIGIT9:
                 if(checkIfLegal(characterPositionRow-1,characterPositionColumn+1)) {
-                    characterPositionRow--;
-                    characterPositionColumn++;
+                    if(checkIfLegal(characterPositionRow-1,characterPositionColumn) ||
+                       checkIfLegal(characterPositionRow,characterPositionColumn+1)){
+                        characterPositionRow--;
+                        characterPositionColumn++;
+                    }
+
                 }
                 break;
             case DIGIT7:
                 if(checkIfLegal(characterPositionRow-1,characterPositionColumn-1)) {
-                    characterPositionRow--;
-                    characterPositionColumn--;
+                    if(checkIfLegal(characterPositionRow-1,characterPositionColumn) ||
+                            checkIfLegal(characterPositionRow,characterPositionColumn-1)) {
+                        characterPositionRow--;
+                        characterPositionColumn--;
+                    }
                 }
                 break;
             case DIGIT3:
                 if(checkIfLegal(characterPositionRow+1,characterPositionColumn+1)) {
-                    characterPositionRow++;
-                    characterPositionColumn++;
+                    if(checkIfLegal(characterPositionRow+1,characterPositionColumn) ||
+                            checkIfLegal(characterPositionRow,characterPositionColumn+1)) {
+                        characterPositionRow++;
+                        characterPositionColumn++;
+                    }
                 }
                 break;
             case DIGIT1:
-                if(checkIfLegal(characterPositionRow-1,characterPositionColumn-1)) {
-                    characterPositionRow++;
-                    characterPositionColumn--;
+                if(checkIfLegal(characterPositionRow+1,characterPositionColumn-1)) {
+                    if(checkIfLegal(characterPositionRow+1,characterPositionColumn) ||
+                            checkIfLegal(characterPositionRow,characterPositionColumn-1)) {
+                        characterPositionRow++;
+                        characterPositionColumn--;
+                    }
                 }
                 break;
 
+            case NUMPAD8:
+                if(checkIfLegal(characterPositionRow-1,characterPositionColumn))
+                    characterPositionRow--;
+                break;
+            case NUMPAD2:
+                if(checkIfLegal(characterPositionRow+1,characterPositionColumn))
+                    characterPositionRow++;
+                break;
+            case NUMPAD6:
+                if(checkIfLegal(characterPositionRow,characterPositionColumn+1))
+                    characterPositionColumn++;
+                break;
+            case NUMPAD4:
+                if(checkIfLegal(characterPositionRow,characterPositionColumn-1))
+                    characterPositionColumn--;
+                break;
+            case NUMPAD9:
+                if(checkIfLegal(characterPositionRow-1,characterPositionColumn+1)) {
+                    if(checkIfLegal(characterPositionRow-1,characterPositionColumn) ||
+                            checkIfLegal(characterPositionRow,characterPositionColumn+1)){
+                        characterPositionRow--;
+                        characterPositionColumn++;
+                    }
+
+                }
+                break;
+            case NUMPAD7:
+                if(checkIfLegal(characterPositionRow-1,characterPositionColumn-1)) {
+                    if(checkIfLegal(characterPositionRow-1,characterPositionColumn) ||
+                            checkIfLegal(characterPositionRow,characterPositionColumn-1)) {
+                        characterPositionRow--;
+                        characterPositionColumn--;
+                    }
+                }
+                break;
+            case NUMPAD3:
+                if(checkIfLegal(characterPositionRow+1,characterPositionColumn+1)) {
+                    if(checkIfLegal(characterPositionRow+1,characterPositionColumn) ||
+                            checkIfLegal(characterPositionRow,characterPositionColumn+1)) {
+                        characterPositionRow++;
+                        characterPositionColumn++;
+                    }
+                }
+                break;
+            case NUMPAD1:
+                if(checkIfLegal(characterPositionRow+1,characterPositionColumn-1)) {
+                    if(checkIfLegal(characterPositionRow+1,characterPositionColumn) ||
+                            checkIfLegal(characterPositionRow,characterPositionColumn-1)) {
+                        characterPositionRow++;
+                        characterPositionColumn--;
+                    }
+                }
+                break;
 
         }
         reachGoal();
