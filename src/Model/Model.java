@@ -234,6 +234,23 @@ public class Model extends Observable implements IModel{
                 }
                 break;
 
+            case UP:
+                if(checkIfLegal(characterPositionRow-1,characterPositionColumn))
+                    characterPositionRow--;
+                break;
+            case DOWN:
+                if(checkIfLegal(characterPositionRow+1,characterPositionColumn))
+                    characterPositionRow++;
+                break;
+            case RIGHT:
+                if(checkIfLegal(characterPositionRow,characterPositionColumn+1))
+                    characterPositionColumn++;
+                break;
+            case LEFT:
+                if(checkIfLegal(characterPositionRow,characterPositionColumn-1))
+                    characterPositionColumn--;
+                break;
+
         }
         reachGoal();
         setChanged();
@@ -314,6 +331,7 @@ public class Model extends Observable implements IModel{
         }
         characterPositionRow=maze.getStartPosition().getRowIndex();
         characterPositionColumn=maze.getStartPosition().getColumnIndex();
+        isReached=false;
         setChanged();
         notifyObservers("loaded");
     }

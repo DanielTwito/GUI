@@ -46,8 +46,9 @@ public class MyViewController implements Observer, IView {
     public javafx.scene.control.Button btn_solveMaze;
     // public javafx.scene.control.MenuItem menu_save;
 
-    private MediaPlayer mp;
-    private MediaPlayer mp2;
+    private MediaPlayer backgroundSound = new MediaPlayer(new Media( new File("resources\\Sound\\background.mp3").toURI().toString()));
+    private MediaPlayer finishSound = new MediaPlayer(new Media(new File("resources\\Sound\\finish.mp3").toURI().toString()));
+    private MediaPlayer moveSound;
     private boolean onCharPressed=false;
 
     public void setViewModel(ViewModel viewModel) {
@@ -79,24 +80,28 @@ public class MyViewController implements Observer, IView {
                 Position end = viewModel.getMaze().getGoalPosition();
                 characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
 
+
             }
 
             if(arg.toString()=="character") {
-                MediaPlayer mp1;
+                isReached = viewModel.isReached();
                 String path = new File("resources\\Sound\\move.mp3").toURI().toString();
-                mp1= new MediaPlayer(new Media(path));
+                moveSound= new MediaPlayer(new Media(path));
                 displayCharactetr();
-                mp1.play();
+                moveSound.play();
                 if (!isReached) {
                     Position end = viewModel.getMaze().getGoalPosition();
                     characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
                 }
+
             }
 
             if(arg.toString()=="solve")
                 displaySolution();
 
             if(arg.toString()=="loaded") {
+                GraphicsContext gc = picDisplayer.getGraphicsContext2D();
+                gc.clearRect(0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
                 Maze maze = viewModel.getMaze();
                 if(maze!=null) {
                     solutionDisplayer.clearCanvas();
@@ -108,13 +113,11 @@ public class MyViewController implements Observer, IView {
                     solutionDisplayer.setDimensions(h,w);
                     displayMaze(maze);
                     displayCharactetr();
-                    if(mp!=null)
-                        mp.stop();
-                    if(mp2!=null)
-                        mp2.stop();
-                    String path = new File("resources\\Sound\\background.mp3").toURI().toString();
-                    mp = new MediaPlayer(new Media(path));
-                    mp.play();
+                    if(backgroundSound != null)
+                        backgroundSound.stop();
+                    if(finishSound != null)
+                        finishSound.stop();
+                    backgroundSound.play();
                     characterDisplayer.drawAt(maze.getGoalPosition().getRowIndex(),
                             maze.getGoalPosition().getColumnIndex(), characterDisplayer.getImageFileNameGoal());
 
@@ -153,13 +156,13 @@ public class MyViewController implements Observer, IView {
     public void generateMaze() {
         GraphicsContext gc = picDisplayer.getGraphicsContext2D();
         gc.clearRect(0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
-        if(mp!=null)
-            mp.stop();
+        if(backgroundSound !=null)
+            backgroundSound.stop();
         isReached=false;
         String path = new File("resources\\Sound\\background.mp3").toURI().toString();
-        mp = new MediaPlayer(new Media(path));
-        if(mp2!=null) {
-            mp2.stop();
+        backgroundSound = new MediaPlayer(new Media(path));
+        if(finishSound !=null) {
+            finishSound.stop();
         }
         try {
             int heigth = Integer.valueOf(txtfld_rowsNum.getText());
@@ -175,7 +178,7 @@ public class MyViewController implements Observer, IView {
             solutionDisplayer.clearSolution();
 
             viewModel.generateMaze(width, heigth);
-            mp.play();
+            backgroundSound.play();
         }catch (NumberFormatException e){showAlert("You Must Enter a Number");}
     }
 
@@ -187,12 +190,10 @@ public class MyViewController implements Observer, IView {
     public void reachGoal() {
         btn_solveMaze.setDisable(true);
         isReached=true;
-        mp.stop();
+        backgroundSound.stop();
         showAlert("Amazing..!!!\nYou found El Professor!!");
-        String path = new File("resources\\Sound\\finish.mp3").toURI().toString();
-        mp2 = new MediaPlayer( new Media(path));
-        mp2.setStartTime(new Duration(13000));
-        mp2.play();
+        finishSound.setStartTime(new Duration(13000));
+        finishSound.play();
 
     }
 
@@ -205,17 +206,6 @@ public class MyViewController implements Observer, IView {
 
 
     public void KeyPressed(KeyEvent keyEvent) {
-//        MediaPlayer mp1;
-//        String path = new File("resources\\Sound\\move.mp3").toURI().toString();
-//        mp1= new MediaPlayer(new Media(path));
-//        if(!isReached)
-//            mp1.setVolume(0.55);
-//        KeyCode kc =keyEvent.getCode();
-//        if(kc==KeyCode.DIGIT1 ||kc==KeyCode.DIGIT2 ||kc==KeyCode.DIGIT3
-//                ||kc==KeyCode.DIGIT4 ||kc==KeyCode.DIGIT6 ||kc==KeyCode.DIGIT7||kc==KeyCode.DIGIT8 || kc==KeyCode.DIGIT9
-//                ||kc==KeyCode.NUMPAD1 ||kc==KeyCode.NUMPAD2 ||kc==KeyCode.NUMPAD3
-//                ||kc==KeyCode.NUMPAD4 ||kc==KeyCode.NUMPAD6 ||kc==KeyCode.NUMPAD7||kc==KeyCode.NUMPAD8 || kc==KeyCode.NUMPAD9)
-//            mp1.play();
         viewModel.moveCharacter(keyEvent.getCode());
         keyEvent.consume();
     }
@@ -293,6 +283,8 @@ public class MyViewController implements Observer, IView {
         File file = fileChooser.showOpenDialog(stage);
         if(file!=null)
             viewModel.loadMaze(file);
+        if(finishSound !=null)
+            finishSound.stop();
 
 
     }
