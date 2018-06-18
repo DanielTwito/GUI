@@ -50,6 +50,7 @@ public class MyViewController implements Observer, IView {
     private MediaPlayer finishSound = new MediaPlayer(new Media(new File("resources\\Sound\\finish.mp3").toURI().toString()));
     private MediaPlayer moveSound;
     private boolean onCharPressed=false;
+    private boolean solvePressed;
 
     public void setViewModel(ViewModel viewModel) {
         this.viewModel = viewModel;
@@ -80,7 +81,6 @@ public class MyViewController implements Observer, IView {
                 Position end = viewModel.getMaze().getGoalPosition();
                 characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
 
-
             }
 
             if(arg.toString()=="character") {
@@ -93,7 +93,6 @@ public class MyViewController implements Observer, IView {
                     Position end = viewModel.getMaze().getGoalPosition();
                     characterDisplayer.drawAt(end.getRowIndex(), end.getColumnIndex(), characterDisplayer.getImageFileNameGoal());
                 }
-
             }
 
             if(arg.toString()=="solve")
@@ -154,6 +153,7 @@ public class MyViewController implements Observer, IView {
     }
 
     public void generateMaze() {
+        solvePressed=false;
         GraphicsContext gc = picDisplayer.getGraphicsContext2D();
         gc.clearRect(0, 0, picDisplayer.getWidth(), picDisplayer.getHeight());
         if(backgroundSound !=null)
@@ -183,6 +183,7 @@ public class MyViewController implements Observer, IView {
     }
 
     public void solveMaze(ActionEvent actionEvent) {
+        solvePressed=true;
         btn_solveMaze.setDisable(true);
         viewModel.solveMaze();
     }
@@ -191,7 +192,10 @@ public class MyViewController implements Observer, IView {
         btn_solveMaze.setDisable(true);
         isReached=true;
         backgroundSound.stop();
-        showAlert("Amazing..!!!\nYou found El Professor!!");
+        if(!solvePressed)
+            showAlert("Amazing..!!!\nYou have reached the goal by yourself!!\n Bravo, you found El Professor!!");
+        else
+            showAlert("Thats good!\nYou have reached the goal according App solution.\nNow try by yourself.");
         finishSound.setStartTime(new Duration(13000));
         finishSound.play();
 
@@ -382,7 +386,7 @@ public class MyViewController implements Observer, IView {
             stage.setTitle("Game Rules");
             FXMLLoader fxmlLoader = new FXMLLoader();
             Parent root = fxmlLoader.load(getClass().getResource("GameRules.fxml").openStream());
-            Scene scene = new Scene(root, 450, 450);
+            Scene scene = new Scene(root, 650, 450);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL); //Lock the window until it closes
             stage.show();

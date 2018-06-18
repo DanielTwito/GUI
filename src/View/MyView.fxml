@@ -100,7 +100,7 @@
             <children>
                 <Canvas fx:id="picDisplayer" height="${mainPane.height}" width="${mainPane.width}" />
                 <MazeDisplayer fx:id="mazeDisplayer" height="${mainPane.height}" imageFileNameWall="resources/Images/mony.jpg" width="${mainPane.width}" />
-                <SolutionDisplayer fx:id="solutionDisplayer" height="${mainPane.height}" imageFileNameSol="resources/Images/wall1.jpg" width="${mainPane.width}" />
+                <SolutionDisplayer fx:id="solutionDisplayer" height="${mainPane.height}" imageFileNameSol="resources/Images/wall11.jpg" width="${mainPane.width}" />
                 <CharacterDisplayer fx:id="characterDisplayer" height="${mainPane.height}" imageFileNameCharacter="resources/Images/character2.png" imageFileNameGoal="resources/Images/destImage.jpg" onMouseDragged="#mouseDrag" onMousePressed="#mousePressed" onMouseReleased="#mouseReleased" width="${mainPane.width}" />
             </children>
             <padding>
